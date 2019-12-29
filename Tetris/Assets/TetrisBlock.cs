@@ -25,7 +25,7 @@ public class TetrisBlock : MonoBehaviour
             transform.position += new Vector3(1, 0, 0);
         }
 
-        if (Time.time - previousTime > fallTime)
+        if (Time.time - previousTime > (Input.GetKey(KeyCode.DownArrow) ? fallTime / 10 : fallTime))
         {
             transform.position += new Vector3(0, -1, 0);
             previousTime = Time.time;

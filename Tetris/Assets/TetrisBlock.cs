@@ -7,6 +7,10 @@ public class TetrisBlock : MonoBehaviour
     float previousTime;
     float fallTime = 0.8f;
     public Vector3 rotationPoint;
+    enum Rotation {
+        LEFT,
+        RIGHT
+    }
     public enum State {
         SPAWN,
         RIGHT,
@@ -45,9 +49,15 @@ public class TetrisBlock : MonoBehaviour
                 transform.position -= new Vector3(1, 0, 0);
             }
         }
-        else if (Input.GetKeyDown(KeyCode.UpArrow))
+        else if (Input.GetKeyDown(KeyCode.UpArrow) ||
+                 Input.GetKeyDown(KeyCode.X))
         {
-            AttemptRotation();
+            AttemptRotation(Rotation.RIGHT);
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftControl) ||
+                 Input.GetKeyDown(KeyCode.Z))
+        {
+            AttemptRotation(Rotation.LEFT);
         }
 
         // Fall in increments of fallTime
@@ -66,27 +76,26 @@ public class TetrisBlock : MonoBehaviour
         }
     }
 
-    void AttemptRotation()
+    void AttemptRotation(Rotation rotation)
     {
-        transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), -90);
+        transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), (rotation == Rotation.RIGHT ? -90 : 90));
         if (!GameManager.Instance.ValidMove(transform))
         {
             GameManager.Instance.WallKick(transform);
         }
         // Update current block state
-        // TODO: Implement and account for left rotation
         switch (currentState) {
             case State.SPAWN:
-                currentState = State.RIGHT;
+                currentState = (rotation == Rotation.RIGHT ? State.RIGHT : State.LEFT);
                 break;
             case State.RIGHT:
-                currentState = State.TWO;
+                currentState = (rotation == Rotation.RIGHT ? State.TWO : State.SPAWN);
                 break;
             case State.TWO:
-                currentState = State.LEFT;
+                currentState = (rotation == Rotation.RIGHT ? State.LEFT : State.RIGHT);
                 break;
             case State.LEFT:
-                currentState = State.SPAWN;
+                currentState = (rotation == Rotation.RIGHT ? State.SPAWN : State.TWO);
                 break;
             default:
                 break;

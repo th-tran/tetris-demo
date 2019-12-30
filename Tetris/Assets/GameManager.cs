@@ -29,6 +29,55 @@ public class GameManager : MonoBehaviour
          grid = new Transform[width, height];
     }
 
+    public bool ValidMove(Transform transform)
+    {
+        foreach (Transform child in transform)
+        {
+            int roundedX = Mathf.RoundToInt(child.transform.position.x);
+            int roundedY = Mathf.RoundToInt(child.transform.position.y);
+
+            // Check for out of bounds
+            if (roundedX < 0 || roundedX >= width || roundedY < 0 || roundedY >= height)
+            {
+                return false;
+            }
+
+            // Check for collision with other tetris blocks
+            if (grid[roundedX, roundedY] != null)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void WallKick(Transform transform)
+    {
+        foreach (Transform child in transform)
+        {
+            int roundedX = Mathf.RoundToInt(child.transform.position.x);
+            int roundedY = Mathf.RoundToInt(child.transform.position.y);
+
+            if (roundedX < 0)
+            {
+                transform.position += new Vector3(1, 0, 0);
+            }
+            else if (roundedX >= width)
+            {
+                transform.position += new Vector3(-1, 0, 0);
+            }
+
+            if (roundedY < 0)
+            {
+                transform.position += new Vector3(0, 1, 0);
+            }
+            else if (roundedY >= height)
+            {
+                transform.position += new Vector3(0, -1, 0);
+            }
+        }
+    }
+
     public void AddToGrid(Transform tetrisBlock)
     {
         foreach (Transform block in tetrisBlock)

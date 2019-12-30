@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
     static GameManager _instance;
     public static GameManager Instance { get { return _instance; } }
+    // Game boudaries
     public static int height = 20;
     public static int width = 10;
     public static Transform[,] grid;

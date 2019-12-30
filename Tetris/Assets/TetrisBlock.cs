@@ -7,10 +7,6 @@ public class TetrisBlock : MonoBehaviour
     float previousTime;
     float fallTime = 0.8f;
     public Vector3 rotationPoint;
-    // Game boundaries
-    public static int height = 20;
-    public static int width = 10;
-    static Transform[,] grid = new Transform[width, height];
 
     // Start is called before the first frame update
     void Start()

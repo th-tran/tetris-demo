@@ -10,6 +10,7 @@ public class TetrisBlock : MonoBehaviour
     // Game boundaries
     public static int height = 20;
     public static int width = 10;
+    static Transform[,] grid = new Transform[width, height];
 
     // Start is called before the first frame update
     void Start()
@@ -52,6 +53,7 @@ public class TetrisBlock : MonoBehaviour
             if (!ValidMove())
             {
                 transform.position -= new Vector3(0, -1, 0);
+                AddToGrid();
                 this.enabled = false;
                 TetrominoSpawner.Instance.NewTetromino();
             }
@@ -59,20 +61,36 @@ public class TetrisBlock : MonoBehaviour
         }
     }
 
-    bool ValidMove()
+    void AddToGrid()
     {
-        // Iterate over each child and check if it is out of bounds
         foreach (Transform child in transform)
         {
             int roundedX = Mathf.RoundToInt(child.transform.position.x);
             int roundedY = Mathf.RoundToInt(child.transform.position.y);
 
+            grid[roundedX, roundedY] = child;
+        }
+    }
+
+    bool ValidMove()
+    {
+        foreach (Transform child in transform)
+        {
+            int roundedX = Mathf.RoundToInt(child.transform.position.x);
+            int roundedY = Mathf.RoundToInt(child.transform.position.y);
+
+            // Check for out of bounds
             if (roundedX < 0 || roundedX >= width || roundedY < 0 || roundedY >= height)
             {
                 return false;
             }
-        }
 
+            // Check for collision with other tetris blocks
+            if (grid[roundedX, roundedY] != null)
+            {
+                return false;
+            }
+        }
         return true;
     }
 

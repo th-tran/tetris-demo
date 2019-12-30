@@ -6,7 +6,7 @@ public class TetrisBlock : MonoBehaviour
 {
     float previousTime;
     float fallTime = 0.8f;
-    Vector3 rotationPoint;
+    public Vector3 rotationPoint;
     // Game boundaries
     public static int height = 20;
     public static int width = 10;
@@ -15,6 +15,15 @@ public class TetrisBlock : MonoBehaviour
     void Start()
     {
 
+    }
+
+    /// <summary>
+    /// Callback to draw gizmos only if the object is selected.
+    /// </summary>
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawSphere(rotationPoint, 0.1f);
     }
 
     // Update is called once per frame

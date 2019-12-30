@@ -17,15 +17,6 @@ public class TetrisBlock : MonoBehaviour
 
     }
 
-    /// <summary>
-    /// Callback to draw gizmos only if the object is selected.
-    /// </summary>
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawSphere(rotationPoint, 0.1f);
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -61,6 +52,8 @@ public class TetrisBlock : MonoBehaviour
             if (!ValidMove())
             {
                 transform.position -= new Vector3(0, -1, 0);
+                this.enabled = false;
+                TetrominoSpawner.Instance.NewTetromino();
             }
             previousTime = Time.time;
         }

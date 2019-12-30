@@ -82,23 +82,31 @@ public class TetrisBlock : MonoBehaviour
         if (!GameManager.Instance.ValidMove(transform))
         {
             GameManager.Instance.WallKick(transform);
+            // Simplied rotation system: do not rotate if it collides with another block
+            if (!GameManager.Instance.ValidMove(transform))
+            {
+                transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), (rotation == Rotation.RIGHT ? 90 : -90));
+            }
         }
-        // Update current block state
-        switch (currentState) {
-            case State.SPAWN:
-                currentState = (rotation == Rotation.RIGHT ? State.RIGHT : State.LEFT);
-                break;
-            case State.RIGHT:
-                currentState = (rotation == Rotation.RIGHT ? State.TWO : State.SPAWN);
-                break;
-            case State.TWO:
-                currentState = (rotation == Rotation.RIGHT ? State.LEFT : State.RIGHT);
-                break;
-            case State.LEFT:
-                currentState = (rotation == Rotation.RIGHT ? State.SPAWN : State.TWO);
-                break;
-            default:
-                break;
+        else
+        {
+            // Update current block state
+            switch (currentState) {
+                case State.SPAWN:
+                    currentState = (rotation == Rotation.RIGHT ? State.RIGHT : State.LEFT);
+                    break;
+                case State.RIGHT:
+                    currentState = (rotation == Rotation.RIGHT ? State.TWO : State.SPAWN);
+                    break;
+                case State.TWO:
+                    currentState = (rotation == Rotation.RIGHT ? State.LEFT : State.RIGHT);
+                    break;
+                case State.LEFT:
+                    currentState = (rotation == Rotation.RIGHT ? State.SPAWN : State.TWO);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
